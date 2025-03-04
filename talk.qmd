@@ -1,0 +1,94 @@
+---
+title: "The Ways of Bayes"
+author: "Matthew Shane Loop, PhD FAHA"
+institute: "Harrison College of Pharmacy | Auburn University"
+format: 
+  revealjs:
+    theme: my_theme.scss
+    auto-stretch: true
+    margin: 0.01
+---
+
+Story
+
+* Hero
+  * drug development PhD student who is looking to up their data analysis skills to finish their dissertation, but also to get an industry job
+  * wants to hear about and learn ideas that will make them attractive to industry
+* Problem
+  * external: $p = 0.06$
+  * internal: "i've wasted all my time", "what if I can't graduate", "what if I die in a soup kitchen knife fight" ; also concerned with truth, scientific inquiry, facts and feelings about my facts are not the same thing
+  * philosophical: why does $p=0.05$ even matter? Isn't it arbitrary anyway? have I really learned nothing about this phenomenon?
+  * villain?
+* encounters a guide
+  * empathizes with their fear: started out in biology (catching lizards and pipetting, getting cells infected), more recently have proposed grant as PI with collecting laboratory data, who's collecting samples, storing them "I really don't want to spend all of this money and time and have nothing to show for it"
+  * has authority: phd in biostatistics, postdoc in epidemiology, "friendly neighborhood statistician" in DPET for 2 years to PhD students and industry fellows -> I have a n understanding of the problems you're facing
+* who gives them a plan
+  * explain difference between frequentist and bayesian modeling
+  * go over practical example of performing a bioequivalence analysis and advantages of bayes to see what's different (with resources to do it on your own)
+* that results in success
+  * billy's work
+  * soha email
+
+## {.scrollable}
+```{r, include = FALSE}
+library(tidyverse)
+library(rstanarm)
+
+set.seed(928374)
+df <- tibble(experimental_group = rep(c("knockout", "wild type", "mutant"), times = 7)) %>%
+  mutate(mouse_id = seq(1:n())) %>%
+  group_by(mouse_id) %>%
+  mutate(
+    gene_expression = case_when(
+      experimental_group == "knockout" ~ rnorm(1, mean = 10, sd = 2),
+      experimental_group == "wild type" ~ rnorm(1, mean = 14, sd = 2),
+      experimental_group == "mutant" ~ rnorm(1, mean = 12, sd = 2)
+    )
+  ) %>%
+  select(mouse_id, experimental_group, gene_expression)
+```
+```{r}
+df %>% tinytable::tt()
+```
+
+---
+
+:::: {.columns}
+
+::: {.column width="50%"}
+Frequentist  
+data + model to fit
+:::
+
+::: {.column width="50%"}
+Bayesian  
+data + model to fit + [prior ]{style="color:#0093d2"}
+
+:::
+
+::::
+
+---
+
+:::: {.columns}
+
+::: {.column width="50%"}
+Frequentist  
+data + model to fit  
+```{r, echo = TRUE}
+f <- lm(gene_expression ~ experimental_group, 
+        data = df)
+```
+:::
+
+::: {.column width="50%"}
+Bayesian  
+data + model to fit + [prior]{style="color:#0093d2"}  
+```{r, output = FALSE, echo = TRUE}
+f <- stan_lm(gene_expression ~ experimental_group, 
+        data = df,
+        prior = R2(0.2, what = "mean"))
+```
+:::
+
+::::
