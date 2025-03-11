@@ -1,39 +1,91 @@
 ---
-title: "The Ways of Bayes"
+title: "The Ways of Bayes: An Introduction for Preclinical Researchers"
+title-slide-attributes: 
+  data-background-image: red_buds.jpg
+  data-background-size: cover
+  data-background-opacity: "0.5"
 author: "Matthew Shane Loop, PhD FAHA"
 institute: "Harrison College of Pharmacy | Auburn University"
 format: 
   revealjs:
     theme: my_theme.scss
     auto-stretch: true
-    margin: 0.01
+    width: 1200
+    height: 800
+    slide-size: "95% 95%"
+    margin: 0.1
+revealjs-plugins:
+  - revealjs-text-resizer
+filters:
+  - code-fullscreen
+highlight-style: arrow-dark
 ---
 
-Story
 
-* Hero
-  * drug development PhD student who is looking to up their data analysis skills to finish their dissertation, but also to get an industry job
-  * wants to hear about and learn ideas that will make them attractive to industry
-* Problem
-  * external: $p = 0.06$
-  * internal: "i've wasted all my time", "what if I can't graduate", "what if I die in a soup kitchen knife fight" ; also concerned with truth, scientific inquiry, facts and feelings about my facts are not the same thing
-  * philosophical: why does $p=0.05$ even matter? Isn't it arbitrary anyway? have I really learned nothing about this phenomenon?
-  * villain?
-* encounters a guide
-  * empathizes with their fear: started out in biology (catching lizards and pipetting, getting cells infected), more recently have proposed grant as PI with collecting laboratory data, who's collecting samples, storing them "I really don't want to spend all of this money and time and have nothing to show for it"
-  * has authority: phd in biostatistics, postdoc in epidemiology, "friendly neighborhood statistician" in DPET for 2 years to PhD students and industry fellows -> I have a n understanding of the problems you're facing
-* who gives them a plan
-  * explain difference between frequentist and bayesian modeling
-  * go over practical example of performing a bioequivalence analysis and advantages of bayes to see what's different (with resources to do it on your own)
-* that results in success
-  * billy's work
-  * soha email
+## 
+
+![](https://medschool.duke.edu/sites/default/files/styles/featured/public/2021-07/BioPhD-banner.jpg?itok=-4XKmVd8){.absolute width="400"}
+![](https://www.timeshighereducation.com/sites/default/files/student_1.jpg){.absolute width="400" bottom=100}
+![](https://img.freepik.com/premium-photo/young-professional-female-hacker-using-keyboard-typing-bad-data-into-computer-online-system-spreading-global-stolen-personal-information_678158-9486.jpg){.absolute width="400" left=600 top=200}
+
+## [P = 0.06]{style="color:white"} {background-image="https://assets.losspreventionmedia.com/2023/03/apocalypse-1280x720-1.jpg"}
+
+## Emotional Reactions
+
+- "I've wasted all this time"
+- "What if I can't graduate?"
+- "What if I die in a soup kitchen knife fight?!"
+
+## Philosophical pinings
+
+- What does $p = 0.05$ even mean?
+
+> Surely, God loves the 0.06 nearly as much as the 0.05." - Rosnow and Rosenthal (1989). "Statistical procedures and the justification of knowledge in psychological science."
+
+- Isn't $p = 0.05$ arbitrary?
+
+## {background-image="https://www.economics.soton.ac.uk/staff/aldrich/fisherguide/Doc1_files/image001.gif" background-size="contain"}
+
+## Interpretation of p-values
+
+When $p = 0.06$ and your pre-specified significance level was 0.05, then your correct interpretation is that the results were "inconclusive" or "we don't know." Not that there is *no effect*.
+
+However, is it really true that you've learned *nothing*?
+
+## {background-image="https://aws-obg-image-lb-1.tcl.com/content/dam/brandsite/region/in/blog/pc/detail/blog-march/washing-machine-dimensions/thumbnail.jpg" background-opacity=0.1 .center}
+
+> "it seems to me that statistics is often sold as a sort of alchemy that transmutes randomness into certainy, an "uncertainty laundering" that begins with data and concludes with success as measured by statistical significance." - Gelman (2016). "The Problems With P-Values are not Just With P-Values."
+
+## Matthew Loop, PhD
+
+![Assistant Professor, Department of Health Outcomes Research and Policy](https://pharmacy.auburn.edu/directory/images/matthew-loop.jpg)
+
+- Began in Biology, anole lizards and pipetting stuff
+- PhD in Biostatistics and Postdoctoral Fellowship in Epidemiology
+- 2 years as "friendly neighborhood statistician" in DPET
+- Taught biostatistics to DPET PhD students and industry fellows
+
+## Type II errors are a big problem for bench scientists
+
+- There's so much work planning and money that goes into these projects
+- I recently submitted a grant application with prospective data collection where I was the PI
+- You don't want to have nothing to show for it
+- Clinicians have RCTs that can fail to demonstrate a clear effect, but they have clinical revenue to fall back on
+
+## Learning Objectives
+
+1. Explain how a treatment effect estimated using Bayesian modeling would differ in interpretation compared to using Frequentist modeling
+2. List reasons why you might want to use a Bayesian model over a Frequentist model
+
+# Explain how a treatment effect estimated using Bayesian modeling would differ in interpretation compared to using Frequentist modeling
 
 ## {.scrollable}
-```{r, include = FALSE}
+```{r}
+#| include: false
 library(tidyverse)
 library(rstanarm)
-
+library(ggtext)
+au_colors <- c("#ffc044", "#e86100", "#0093d2", "#0b2341")
 set.seed(928374)
 df <- tibble(experimental_group = rep(c("knockout", "wild type", "mutant"), times = 7)) %>%
   mutate(mouse_id = seq(1:n())) %>%
@@ -47,6 +99,7 @@ df <- tibble(experimental_group = rep(c("knockout", "wild type", "mutant"), time
   ) %>%
   select(mouse_id, experimental_group, gene_expression)
 ```
+
 ```{r}
 df %>% tinytable::tt()
 ```
@@ -75,7 +128,11 @@ data + model to fit + [prior ]{style="color:#0093d2"}
 ::: {.column width="50%"}
 Frequentist  
 data + model to fit  
-```{r, echo = TRUE}
+
+```{r}
+#| code-overflow: wrap
+#| echo: true
+
 f <- lm(gene_expression ~ experimental_group, 
         data = df)
 ```
@@ -84,11 +141,335 @@ f <- lm(gene_expression ~ experimental_group,
 ::: {.column width="50%"}
 Bayesian  
 data + model to fit + [prior]{style="color:#0093d2"}  
-```{r, output = FALSE, echo = TRUE}
+
+```{r}
+#| code-overflow: wrap
+#| output: false
+#| echo: true
+
 f <- stan_lm(gene_expression ~ experimental_group, 
         data = df,
-        prior = R2(0.2, what = "mean"))
+        prior = R2(0.2, what = "mean"),
+        prior_intercept = normal(0, 10))
 ```
 :::
 
 ::::
+
+---
+
+:::: {.columns}
+
+::: {.column width="50%"}
+Frequentist  
+data + model to fit  
+
+```{r}
+#| echo: true
+
+f <- lm(gene_expression ~ experimental_group, 
+        data = df)
+```
+
+```{r}
+gtsummary::tbl_regression((f))
+```
+
+:::
+
+::: {.column width="50%"}
+Bayesian  
+data + model to fit + [prior]{style="color:#0093d2"}  
+
+```{r}
+#| eval: false
+#| echo: true
+
+f <- stan_lm(gene_expression ~ experimental_group, 
+        data = df,
+        prior = R2(0.2, what = "mean"),
+        prior_intercept = normal(0, 10))
+```
+
+```{r}
+#| output: false
+
+f_bayes <- stan_lm(gene_expression ~ experimental_group, 
+        data = df,
+        prior = R2(0.2, what = "mean"),
+        prior_intercept = normal(0, 10))
+b = f_bayes %>%
+  as_tibble() %>%
+  mutate(
+    y = if_else(`experimental_groupwild type` > 0, 1, 0)
+  ) %>%
+  pull(y) %>%
+  mean() %>%
+  round(1)
+```
+
+```{r}
+gtsummary::tbl_regression(f_bayes)
+```
+
+:::
+
+::::
+
+---
+
+:::: {.columns}
+
+::: {.column width="50%"}
+Frequentist  
+data + model to fit  
+
+```{r}
+gtsummary::tbl_regression((f))
+```
+
+- Inconclusive differences in mean gene expression among experimental groups
+- Wild type mean gene expression might be between 0.31 units lower or 3.6 units higher than knockout
+:::
+
+::: {.column width="50%"}
+Bayesian  
+data + model to fit + [prior]{style="color:#0093d2"}  
+
+```{r}
+gtsummary::tbl_regression(f_bayes)
+```
+
+- 95% probability that wild type mean gene expression is between 0.29 units lower and 2.8 units higher than knockout mean gene expression
+:::
+
+::::
+
+---
+
+
+
+```{r}
+library(bayestestR)
+#| echo: true
+c <- as_tibble(f_bayes)[, -5]
+describe_posterior(c)
+```
+
+
+# What is this [prior?]{style="color:#0093d2"}
+
+---
+
+```{r}
+f_prior <- stan_lm(gene_expression ~ experimental_group, 
+        data = df,
+        prior = R2(0.2, what = "mean"),
+        prior_intercept = normal(0, 10),
+        prior_PD = TRUE,
+        refresh = 0)
+a <- data.frame(f_prior) %>% as_tibble()
+a %>%
+  ggplot(aes(x = R2)) +
+  geom_histogram()
+```
+
+---
+
+```{r}
+a %>%
+  select(contains("exper")) %>%
+  pivot_longer(cols = everything(), names_to = "param", values_to = "draw") %>%
+  ggplot(aes(x = draw)) +
+  geom_histogram() +
+  facet_wrap(~param)
+```
+
+---
+
+```{r}
+c <- as_tibble(f_bayes)[, -5]
+names(a) <- names(c)
+
+d <- rbind(a %>% mutate(source = "prior"), c %>% mutate(source = "posterior"))
+
+d %>%
+  ggplot(aes(x = R2, fill = source)) +
+  geom_histogram() +
+  scale_fill_manual(values = au_colors)
+```
+
+---
+
+```{r}
+d %>%
+  select(contains("exper"), source) %>%
+  pivot_longer(contains("exper"), names_to = "param", values_to = "draw") %>%
+  ggplot(aes(x = draw, fill = source)) +
+  geom_histogram() +
+  facet_wrap(~param) +
+  scale_fill_manual(values = au_colors)
+```
+
+---
+
+```{r}
+d %>%
+  filter(source == "posterior") %>%
+  ggplot(aes(x = `experimental_groupwild type`)) +
+  geom_histogram() +
+  geom_vline(xintercept = 0, linetype = "dashed")
+```
+
+
+# List reasons why you might want to use a Bayesian model over a Frequentist model
+
+## Reasons
+
+- What you put into the model and how you interpret the results are different in the Bayesian and Frequentist paradigms. And these differences are important.
+- But it is important to know when to use a Bayesian model versus a Frequentist model. You can use either just about any time, but there are some specific situations where Bayesian models come in handy.
+- Therefore, we are going to talk about two of those situations: small sample sizes with known parameter constraints and topics with a lot of debate in the field.
+
+## 'Petite' sample size with known parameter constraints
+
+- Restrictions on what are plausible values for the parameters can help improve precision in estimating treatment effects
+- Similar to PK modeling where you take into account known physiological restrictions on possible values to get better estimates
+- Petite data and lots of parameters 
+
+---
+
+```{r}
+
+tidybayes::add_predicted_draws(df, f_prior) %>%
+  ungroup() %>%
+  filter(.draw < 11) %>%
+  ggplot(aes(x = .prediction)) +
+  geom_density(color = au_colors[1]) +
+  geom_density(data = df, aes(x = gene_expression), color = au_colors[2]) +
+  facet_wrap(~ .draw) +
+  labs(
+    title = "<span style='color:#ffc044;'>Data under prior</span> and <span style='color:#e86100;'>Original Data</span>"
+    ) +
+  theme(plot.title = element_markdown())
+```
+
+---
+
+```{r}
+#| echo: true
+f_prior_tighter <- stan_lm(gene_expression ~ experimental_group, 
+        data = df,
+        prior = R2(0.2, what = "mean"),
+        prior_intercept = normal(10, 5),
+        prior_PD = TRUE,
+        refresh = 0)
+```
+
+```{r}
+tidybayes::add_predicted_draws(df, f_prior_tighter) %>%
+  ungroup() %>%
+  filter(.draw < 11) %>%
+  ggplot(aes(x = .prediction)) +
+  geom_density(color = au_colors[1]) +
+  geom_density(data = df, aes(x = gene_expression), color = au_colors[2]) +
+  facet_wrap(~ .draw) +
+  labs(
+    title = "<span style='color:#ffc044;'>Data under prior</span> and <span style='color:#e86100;'>Original Data</span>"
+    ) +
+  theme(plot.title = element_markdown())
+```
+
+## The treatment has a lot of debate in the field
+
+![](https://www.psychologicalscience.org/redesign/wp-content/uploads/2013/12/PAFF_121113_aggressionglucoseMFB_newsfeature.jpg)
+
+```{r}
+#| output: false
+#| echo: true
+f_bayes_skeptic <- stan_lm(gene_expression ~ experimental_group, 
+        data = df,
+        prior = R2(0.05, what = "mean"))
+
+post_skeptic <- as_tibble(f_bayes_skeptic)
+f_bayes_tb <- stan_lm(gene_expression ~ experimental_group, 
+        data = df,
+        prior = R2(0.9, what = "mean"))
+
+post_tb <- as_tibble(f_bayes_tb)
+```
+
+---
+
+```{r}
+ggplot() +
+  geom_density(data = c, aes(x = `experimental_groupwild type`), fill = au_colors[1], alpha = 0.5) +
+  geom_density(data = post_skeptic, aes(x = `experimental_groupwild type`), fill = au_colors[2], alpha = 0.5) +
+  geom_density(data = post_tb, aes(x = `experimental_groupwild type`), fill = au_colors[3], alpha = 0.5) +
+  annotate(geom = "text", x = 3, y = 0.6, label = "Agnostic", color = au_colors[1]) +
+  annotate(geom = "text", x = 3, y = 0.5, label = "Skeptic", color = au_colors[2]) +
+  annotate(geom = "text", x = 3, y = 0.4, label = "True believer", color = au_colors[3])
+```
+
+# Successful uses of Bayesian analysis
+
+## {background-image="covid_nejm_title.png" background-size="contain"}
+
+## {background-image="covid_nejm_methods.png" background-size="contain"}
+
+## Example from Eshelman
+
+:::: {.columns}
+
+::: {.column width="20%"}
+![](billy.jpg){.absolute height="280" top=90}
+
+![](kim_brouwer.jpeg){.absolute height="280" bottom=90}
+:::
+
+::: {.column width="80%"}
+![](billy_title.png){.absolute width=800 left=400}
+:::
+
+::::
+
+## 
+
+::: {layout-ncol=2}
+![Methods](billy_methods.png)
+
+![Results](billy_plot.png)
+
+:::
+
+## Email from a previous student
+
+> The party doing the modeling wants to use a Bayesian approach for the extrapolation. In addition, a Bayesian approach was used to generate a popPK model and to predict the dose.... I can build on my knowledge [*of Bayesian analysis*] to educate myself further or ask educated questions (as we have a biostatisticians in our team).
+
+# Resources
+
+## The patron saint of Bayesian data analysis for non-statisticians
+
+:::: {.columns}
+
+::: {.column width="30%"}
+
+![[Dr. Richard McElreath](https://xcelab.net/rm/)](https://www.eva.mpg.de/fileadmin/_processed_/8/0/csm_richard_dec_2023_e08f49768a.png){fig-align="left"}
+
+:::
+
+::: {.column width="70%"}
+[Statistical Rethinking: A Bayesian Course with Examples in R and STAN](https://www.routledge.com/Statistical-Rethinking-A-Bayesian-Course-with-Examples-in-R-and-STAN/McElreath/p/book/9780367139919) - the best introductory statistics textbook there is  
+[Statistical Rethinking online course](https://github.com/rmcelreath/stat_rethinking_2024)
+![And his memes are transcendant](https://github.com/rmcelreath/stat_rethinking_2024/blob/main/memes/how_could_stats_do_this.png?raw=true){.absolute height="350"}
+:::
+
+::::
+
+## Less good resources from yours truly
+
+- [Getting started with R playlist](https://uncch.hosted.panopto.com/Panopto/Pages/Viewer.aspx?pid=0667988c-7695-4ead-b51f-ae7500de9be7)
+- [Fitting a Bayesian GLM](https://uncch.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=58880a99-4607-449a-9ed3-acf501345866)
+- [Summarizing posterior distributions](https://uncch.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=a64341cd-03d0-46d3-ae18-ae75001c5ce6)
+
+## [Thank you!]{style="color:white"}  {background-image="https://cdn.britannica.com/60/121760-050-7ECA3816/Samford-Hall-Auburn-University.jpg"}
+

@@ -3,6 +3,7 @@
 // fonts
 $font-family-sans-serif: "Gill Sans", "Palatino Linotype", "Book Antiqua", Palatino,
   FreeSerif, serif !default;
+$r-block-code-font-size: 1em;
 
 // colors
 $body-bg: #0b2341 !default;
@@ -35,6 +36,17 @@ $presentation-title-slide-text-align: "left";
 
 .reveal .column {
     flex: 1;
-    margin: 0 1px;
+    margin: 0 0.1px;
 }
 
+h1.title {
+  color: white !important;
+}
+
+.quarto-title-author-name {
+  color: white !important;
+}
+
+.quarto-title-affiliation {
+  color: white !important;
+}
