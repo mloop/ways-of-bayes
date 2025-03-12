@@ -58,12 +58,24 @@ However, is it really true that you've learned *nothing*?
 
 ## Matthew Loop, PhD
 
-![Assistant Professor, Department of Health Outcomes Research and Policy](https://pharmacy.auburn.edu/directory/images/matthew-loop.jpg)
+:::: {.columns}
 
-- Began in Biology, anole lizards and pipetting stuff
-- PhD in Biostatistics and Postdoctoral Fellowship in Epidemiology
+::: {.column width="30%"}
+![Assistant Professor, Department of Health Outcomes Research and Policy](https://pharmacy.auburn.edu/directory/images/matthew-loop.jpg){width="300px"}
+![](https://bunny-wp-pullzone-5vqgtgkbhi.b-cdn.net/wp-content/uploads/2023/04/Green-Anole.jpg){width="300px"}
+:::
+
+::: {.column width="70%"}
+
+![](https://d2jx2rerrg6sh3.cloudfront.net/images/news/ImageForNews_729085_16667844351834173.jpg){width="300px"}
+![](https://www.uab.edu/news/images/migration/articles/intro-images/regards-study-secures-nih-funding-for-another-five-years-expands-research-on-stroke-and-brain-health-risks.jpg){width="300px"}
+
 - 2 years as "friendly neighborhood statistician" in DPET
 - Taught biostatistics to DPET PhD students and industry fellows
+
+:::
+
+::::
 
 ## Type II errors are a big problem for bench scientists
 
