@@ -461,8 +461,7 @@ tidybayes::add_predicted_draws(df, f_prior_tighter) %>%
 
 ::: {.column width="70%"}
 [Statistical Rethinking: A Bayesian Course with Examples in R and STAN](https://www.routledge.com/Statistical-Rethinking-A-Bayesian-Course-with-Examples-in-R-and-STAN/McElreath/p/book/9780367139919) - the best introductory statistics textbook there is  
-[Statistical Rethinking online course](https://github.com/rmcelreath/stat_rethinking_2024)
-![And his memes are transcendant](https://github.com/rmcelreath/stat_rethinking_2024/blob/main/memes/how_could_stats_do_this.png?raw=true){.absolute height="350"}
+[Statistical Rethinking online course](https://github.com/rmcelreath/stat_rethinking_2024) - hours of soothing Bayesian lectures (and great memes)
 :::
 
 ::::
