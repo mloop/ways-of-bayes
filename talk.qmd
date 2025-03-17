@@ -21,6 +21,7 @@ filters:
 highlight-style: arrow-dark
 ---
 
+# `mloop.github.io/ways-of-bayes`
 
 ## 
 
@@ -54,7 +55,7 @@ When $p = 0.06$ and your pre-specified significance level was 0.05, then your co
 
 However, is it really true that you've learned *nothing*?
 
-## {background-image="https://aws-obg-image-lb-1.tcl.com/content/dam/brandsite/region/in/blog/pc/detail/blog-march/washing-machine-dimensions/thumbnail.jpg" background-opacity=0.1 .center}
+## Binary thinking with scientific evidence {background-image="https://aws-obg-image-lb-1.tcl.com/content/dam/brandsite/region/in/blog/pc/detail/blog-march/washing-machine-dimensions/thumbnail.jpg" background-opacity=0.1 .center}
 
 > "it seems to me that statistics is often sold as a sort of alchemy that transmutes randomness into certainy, an "uncertainty laundering" that begins with data and concludes with success as measured by statistical significance." - Gelman (2016). "The Problems With P-Values are not Just With P-Values."
 
