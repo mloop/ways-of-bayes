@@ -32,9 +32,11 @@ highlight-style: arrow-dark
 
 ## Emotional Reactions
 
+::: {.incremental}
 - "I've wasted all this time"
 - "What if I can't graduate?"
 - "What if I die in a soup kitchen knife fight?!"
+:::
 
 ## Philosophical pinings
 
