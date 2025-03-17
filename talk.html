@@ -250,6 +250,11 @@ Matthew Shane Loop, PhD FAHA
 <p>“it seems to me that statistics is often sold as a sort of alchemy that transmutes randomness into certainy, an”uncertainty laundering” that begins with data and concludes with success as measured by statistical significance.” - Gelman (2016). “The Problems With P-Values are not Just With P-Values.”</p>
 </blockquote>
 </section>
+<section>
+<section id="there-is-another-way" class="title-slide slide level1 center" data-background-image="https://lumiere-a.akamaihd.net/v1/images/din-djarin-the-mandalorian-main_38344f24.jpeg">
+<h1><span style="color:white">There is another way</span></h1>
+
+</section>
 <section id="matthew-loop-phd" class="slide level2">
 <h2>Matthew Loop, PhD</h2>
 <div class="columns">
@@ -276,9 +281,9 @@ Matthew Shane Loop, PhD FAHA
 <h2>Learning Objectives</h2>
 <ol type="1">
 <li>Explain how a treatment effect estimated using Bayesian modeling would differ in interpretation compared to using Frequentist modeling</li>
-<li>List reasons why you might want to use a Bayesian model over a Frequentist model</li>
+<li>Explain how to choose a prior distribution for a Bayesian model</li>
 </ol>
-</section>
+</section></section>
 <section>
 <section id="explain-how-a-treatment-effect-estimated-using-bayesian-modeling-would-differ-in-interpretation-compared-to-using-frequentist-modeling" class="title-slide slide level1 center">
 <h1>Explain how a treatment effect estimated using Bayesian modeling would differ in interpretation compared to using Frequentist modeling</h1>
@@ -2567,8 +2572,8 @@ data + model to fit + <span style="color:#0093d2">prior</span></p>
 </ul>
 </div></div>
 </section>
-<section class="slide level2">
-
+<section id="additional-bayesian-summary" class="slide level2">
+<h2>Additional Bayesian summary</h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>Summary of Posterior Distribution
@@ -2609,30 +2614,31 @@ R2                          |   0.11 | [ 0.00,  0.34] |   100% | [-0.10, 0.10] |
 
 <img data-src="talk_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"></section></section>
 <section>
-<section id="list-reasons-why-you-might-want-to-use-a-bayesian-model-over-a-frequentist-model" class="title-slide slide level1 center">
-<h1>List reasons why you might want to use a Bayesian model over a Frequentist model</h1>
+<section id="how-do-you-choose-a-prior" class="title-slide slide level1 top center" data-background-image="https://images.stockcake.com/public/9/a/a/9aa4fd48-fc58-48f9-94ed-e3d55c5b71cc_large/wizard-conjuring-lightning-stockcake.jpg">
+<h1><span style="color:white">How do you choose a prior?</span></h1>
 
 </section>
-<section id="reasons" class="slide level2">
-<h2>Reasons</h2>
+<section id="flat-priors" class="slide level2">
+<h2>Flat priors</h2>
+
+<img data-src="talk_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section>
+<section id="weakly-informative-priors" class="slide level2">
+<h2>“Weakly informative” priors</h2>
+
+<img data-src="talk_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
+<section id="benefits-of-weakly-informative-priors" class="slide level2">
+<h2>Benefits of weakly informative priors</h2>
 <ul>
-<li>What you put into the model and how you interpret the results are different in the Bayesian and Frequentist paradigms. And these differences are important.</li>
-<li>But it is important to know when to use a Bayesian model versus a Frequentist model. You can use either just about any time, but there are some specific situations where Bayesian models come in handy.</li>
-<li>Therefore, we are going to talk about two of those situations: small sample sizes with known parameter constraints and topics with a lot of debate in the field.</li>
-</ul>
-</section>
-<section id="petite-sample-size-with-known-parameter-constraints" class="slide level2">
-<h2>‘Petite’ sample size with known parameter constraints</h2>
-<ul>
-<li>Restrictions on what are plausible values for the parameters can help improve precision in estimating treatment effects</li>
-<li>Similar to PK modeling where you take into account known physiological restrictions on possible values to get better estimates</li>
-<li>Petite data and lots of parameters</li>
+<li>You can still be “unbiased” and center them at 0 effect</li>
+<li>You can restrict your prior beliefs to the realm of possibility</li>
+<li>When you have smaller datasets and lots of parameters to estimate, such as in PK data, it can help with the uncertainty</li>
+<li>Normal distribution is least informative</li>
 </ul>
 </section>
 <section class="slide level2">
 
 
-<img data-src="talk_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section>
+<img data-src="talk_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"></section>
 <section class="slide level2">
 
 <div class="cell">
@@ -2643,26 +2649,6 @@ R2                          |   0.11 | [ 0.00,  0.34] |   100% | [-0.10, 0.10] |
 <span id="cb6-5"><a href=""></a>        <span class="at">prior_PD =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb6-6"><a href=""></a>        <span class="at">refresh =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-
-<img data-src="talk_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"></section>
-<section id="the-treatment-has-a-lot-of-debate-in-the-field" class="slide level2">
-<h2>The treatment has a lot of debate in the field</h2>
-
-<img data-src="https://www.psychologicalscience.org/redesign/wp-content/uploads/2013/12/PAFF_121113_aggressionglucoseMFB_newsfeature.jpg" class="r-stretch"><div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>f_bayes_skeptic <span class="ot">&lt;-</span> <span class="fu">stan_lm</span>(gene_expression <span class="sc">~</span> experimental_group, </span>
-<span id="cb7-2"><a href=""></a>        <span class="at">data =</span> df,</span>
-<span id="cb7-3"><a href=""></a>        <span class="at">prior =</span> <span class="fu">R2</span>(<span class="fl">0.05</span>, <span class="at">what =</span> <span class="st">"mean"</span>))</span>
-<span id="cb7-4"><a href=""></a></span>
-<span id="cb7-5"><a href=""></a>post_skeptic <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(f_bayes_skeptic)</span>
-<span id="cb7-6"><a href=""></a>f_bayes_tb <span class="ot">&lt;-</span> <span class="fu">stan_lm</span>(gene_expression <span class="sc">~</span> experimental_group, </span>
-<span id="cb7-7"><a href=""></a>        <span class="at">data =</span> df,</span>
-<span id="cb7-8"><a href=""></a>        <span class="at">prior =</span> <span class="fu">R2</span>(<span class="fl">0.9</span>, <span class="at">what =</span> <span class="st">"mean"</span>))</span>
-<span id="cb7-9"><a href=""></a></span>
-<span id="cb7-10"><a href=""></a>post_tb <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(f_bayes_tb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section class="slide level2">
-
 
 <img data-src="talk_files/figure-revealjs/unnamed-chunk-22-1.png" width="960" class="r-stretch"></section></section>
 <section>

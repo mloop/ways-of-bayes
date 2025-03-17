@@ -56,6 +56,8 @@ However, is it really true that you've learned *nothing*?
 
 > "it seems to me that statistics is often sold as a sort of alchemy that transmutes randomness into certainy, an "uncertainty laundering" that begins with data and concludes with success as measured by statistical significance." - Gelman (2016). "The Problems With P-Values are not Just With P-Values."
 
+# [There is another way]{style="color:white"} {background-image="https://lumiere-a.akamaihd.net/v1/images/din-djarin-the-mandalorian-main_38344f24.jpeg"}
+
 ## Matthew Loop, PhD
 
 :::: {.columns}
@@ -87,7 +89,7 @@ However, is it really true that you've learned *nothing*?
 ## Learning Objectives
 
 1. Explain how a treatment effect estimated using Bayesian modeling would differ in interpretation compared to using Frequentist modeling
-2. List reasons why you might want to use a Bayesian model over a Frequentist model
+2. Explain how to choose a prior distribution for a Bayesian model
 
 # Explain how a treatment effect estimated using Bayesian modeling would differ in interpretation compared to using Frequentist modeling
 
@@ -257,9 +259,7 @@ gtsummary::tbl_regression(f_bayes)
 
 ::::
 
----
-
-
+## Additional Bayesian summary
 
 ```{r}
 library(bayestestR)
@@ -330,23 +330,39 @@ d %>%
   filter(source == "posterior") %>%
   ggplot(aes(x = `experimental_groupwild type`)) +
   geom_histogram() +
-  geom_vline(xintercept = 0, linetype = "dashed")
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  geom_vline(xintercept = -0.1, color = "blue") +
+  geom_vline(xintercept = 0.1, color = "blue")
 ```
 
+# [How do you choose a prior?]{style="color:white"} {background-image="https://images.stockcake.com/public/9/a/a/9aa4fd48-fc58-48f9-94ed-e3d55c5b71cc_large/wizard-conjuring-lightning-stockcake.jpg" .top}
 
-# List reasons why you might want to use a Bayesian model over a Frequentist model
 
-## Reasons
+## Flat priors
 
-- What you put into the model and how you interpret the results are different in the Bayesian and Frequentist paradigms. And these differences are important.
-- But it is important to know when to use a Bayesian model versus a Frequentist model. You can use either just about any time, but there are some specific situations where Bayesian models come in handy.
-- Therefore, we are going to talk about two of those situations: small sample sizes with known parameter constraints and topics with a lot of debate in the field.
+```{r}
+d <- tibble(x = runif(10000, -1000, 1000))
+ggplot(data = d, aes(x = x)) + geom_histogram() +
+  labs(title = "Prior for the effect of blood pressure treatment",
+       x = "Prior mean reduction in blood pressure")
+```
 
-## 'Petite' sample size with known parameter constraints
+## "Weakly informative" priors
 
-- Restrictions on what are plausible values for the parameters can help improve precision in estimating treatment effects
-- Similar to PK modeling where you take into account known physiological restrictions on possible values to get better estimates
-- Petite data and lots of parameters 
+```{r}
+d <- tibble(x = rnorm(10000, 0, 10))
+ggplot(data = d, aes(x = x)) + geom_histogram() +
+  labs(title = "Prior for the effect of blood pressure treatment",
+       x = "Prior mean reduction in blood pressure")
+```
+
+## Benefits of weakly informative priors
+
+- You can still be "unbiased" and center them at 0 effect
+- You can restrict your prior beliefs to the realm of possibility
+- When you have smaller datasets and lots of parameters to estimate, such as in PK data, it can help with the uncertainty
+- Normal distribution is least informative
+
 
 ---
 
@@ -389,37 +405,6 @@ tidybayes::add_predicted_draws(df, f_prior_tighter) %>%
     title = "<span style='color:#ffc044;'>Data under prior</span> and <span style='color:#e86100;'>Original Data</span>"
     ) +
   theme(plot.title = element_markdown())
-```
-
-## The treatment has a lot of debate in the field
-
-![](https://www.psychologicalscience.org/redesign/wp-content/uploads/2013/12/PAFF_121113_aggressionglucoseMFB_newsfeature.jpg)
-
-```{r}
-#| output: false
-#| echo: true
-f_bayes_skeptic <- stan_lm(gene_expression ~ experimental_group, 
-        data = df,
-        prior = R2(0.05, what = "mean"))
-
-post_skeptic <- as_tibble(f_bayes_skeptic)
-f_bayes_tb <- stan_lm(gene_expression ~ experimental_group, 
-        data = df,
-        prior = R2(0.9, what = "mean"))
-
-post_tb <- as_tibble(f_bayes_tb)
-```
-
----
-
-```{r}
-ggplot() +
-  geom_density(data = c, aes(x = `experimental_groupwild type`), fill = au_colors[1], alpha = 0.5) +
-  geom_density(data = post_skeptic, aes(x = `experimental_groupwild type`), fill = au_colors[2], alpha = 0.5) +
-  geom_density(data = post_tb, aes(x = `experimental_groupwild type`), fill = au_colors[3], alpha = 0.5) +
-  annotate(geom = "text", x = 3, y = 0.6, label = "Agnostic", color = au_colors[1]) +
-  annotate(geom = "text", x = 3, y = 0.5, label = "Skeptic", color = au_colors[2]) +
-  annotate(geom = "text", x = 3, y = 0.4, label = "True believer", color = au_colors[3])
 ```
 
 # Successful uses of Bayesian analysis
