@@ -84,10 +84,12 @@ However, is it really true that you've learned *nothing*?
 
 ## Type II errors are a big problem for bench scientists
 
+::: {.incremental}
 - There's so much work planning and money that goes into these projects
 - I recently submitted a grant application with prospective data collection where I was the PI
 - You don't want to have nothing to show for it
 - Clinicians have RCTs that can fail to demonstrate a clear effect, but they have clinical revenue to fall back on
+:::
 
 ## Learning Objectives
 
